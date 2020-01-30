@@ -6,8 +6,9 @@
 
 <h2>Delete Species</h2>
 
-<div class="container">
-    <div class="col">Name : @Model.Name</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Name:</div>
+    <div class="panel-body">@Model.Name</div>
 </div>
 
 <form method="post" class="container" action="/Species/Delete/@Model.SpeciesID">

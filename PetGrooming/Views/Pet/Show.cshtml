@@ -4,8 +4,43 @@
     ViewBag.Title = "Show";
 }
 
-<h2>Show Pet</h2>
+    <div class="container">
+        <div class="container">
+            <h2>Show Pet</h2>
 
-<div>Name : @Model.PetName</div>
-<div>Weight : @Model.Weight</div>
-<div>Species : @Model.Species.Name</div>
+
+            <div class="btn-group">
+                <a class="btn btn-info" role="button" href="/Pet/Update/@Model.PetID">Edit</a>
+                <a class="btn btn-info" role="button" href="/Pet/Delete/@Model.PetID">Delete</a>
+            </div>
+
+        </div>
+        
+
+
+
+        <div class="container">
+            <div class="panel panel-default">
+                <div class="panel-heading">Name:</div>
+                <div class="panel-body"> @Model.PetName</div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Weight:</div>
+                <div class="panel-body"> @Model.Weight</div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Species:</div>
+                <div class="panel-body"> @Model.Species.Name</div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Color:</div>
+                <div class="panel-body"> @Model.Color</div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">Notes:</div>
+                <div class="panel-body"> @Model.Notes</div>
+            </div>
+        </div>
+
+    </div>
+

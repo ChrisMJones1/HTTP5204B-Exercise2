@@ -1,4 +1,4 @@
-﻿@model PetGrooming.Models.Species
+﻿@model PetGrooming.Models.ViewModels.ShowSpecies
 @{
     ViewBag.Title = "Show";
 }
@@ -6,5 +6,40 @@
 
 
 <h2>Show Species</h2>
+@* Navigation elements for specific species *@
+<div class="btn-group">
+    <a class="btn btn-info" role="button" href="/Species/Update/@Model.species.SpeciesID">Edit</a>
+    <a class="btn btn-info" role="button" href="/Species/Delete/@Model.species.SpeciesID">Delete</a>
+</div>
 
-<div>Name : @Model.Name</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Name:</div> 
+    <div class="panel-body">@Model.species.Name</div>
+</div>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Species</th>
+            <th>Weight</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @{
+            foreach (var Pet in Model.pets)
+            {
+                <tr>
+                    <td><a href="/Pet/Show/@Pet.PetID">@Pet.PetName</a></td>
+                    <td>@Pet.Species.Name</td>
+                    <td>@Pet.Weight</td>
+                    <td><a class="btn btn-info" role="button" href="/Pet/Update/@Pet.PetID">Edit</a></td>
+                    <td><a class="btn btn-info" role="button" href="/Pet/Delete/@Pet.PetID">Delete</a></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

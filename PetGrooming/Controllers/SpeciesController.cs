@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using PetGrooming.Data;
 using PetGrooming.Models;
+using PetGrooming.Models.ViewModels;
 using System.Diagnostics;
 
 namespace PetGrooming.Controllers
@@ -32,7 +33,7 @@ namespace PetGrooming.Controllers
 
             return View(myspecies);
         }
-        public ActionResult Show(int? id)
+        public ActionResult Show(int? id) //when showing a specific species, we also want to retrieve the list of pets with that species to display using the ShowSpecies viewmodel
         {
             if (id == null)
             {
@@ -43,7 +44,15 @@ namespace PetGrooming.Controllers
             {
                 return HttpNotFound();
             }
-            return View(species);
+            List<Pet> selectedpets = db.Pets.SqlQuery("select * from pets where speciesid=@SpeciesID", new SqlParameter("@SpeciesID", id)).ToList();
+  
+
+            ShowSpecies showspecies = new ShowSpecies();
+
+            showspecies.pets = selectedpets;
+            showspecies.species = species;
+
+            return View(showspecies);
         }
         public ActionResult Add()
         {
@@ -60,7 +69,7 @@ namespace PetGrooming.Controllers
         }
 
         [HttpPost]
-        public ActionResult Add(string SpeciesName)
+        public ActionResult Add(string SpeciesName) //upon post submission of the Species/Add page form, run an insert statement using the provided name
         {
             string query = "insert into species (Name) values (@SpeciesName)";
             SqlParameter[] sqlparams = new SqlParameter[1];
@@ -69,36 +78,38 @@ namespace PetGrooming.Controllers
             db.Database.ExecuteSqlCommand(query, sqlparams);
 
 
-            //run the list method to return to a list of pets so we can see our new one!
+            //return to the list of species
             return RedirectToAction("List");
         }
 
         public ActionResult Update(int id)
         {
-            //need information about a particular pet
+            //To fill the existing name into the entry form, we grab the species from the database by its id
             Species selectedspecies = db.Species.SqlQuery("select * from species where speciesid = @id", new SqlParameter("@id", id)).FirstOrDefault();
 
+            
             return View(selectedspecies);
         }
 
         [HttpPost]
-        public ActionResult Update(string SpeciesName, int SpeciesID)
+        public ActionResult Update(string SpeciesName, int SpeciesID) //taking the new Species name and the ID of the species you want to change, run an update query
         {
 
             Debug.WriteLine("I am trying to edit a species' name to " + SpeciesName + " and with an ID of " + SpeciesID);
 
             string query = "UPDATE species set Name = @SpeciesName WHERE speciesid = @SpeciesID";
             SqlParameter[] sqlparams = new SqlParameter[2]; 
-            //each piece of information is a key and value pair
+        
             sqlparams[0] = new SqlParameter("@SpeciesName", SpeciesName);
             sqlparams[1] = new SqlParameter("@SpeciesID", SpeciesID);
+
 
             db.Database.ExecuteSqlCommand(query, sqlparams);
 
             return RedirectToAction("List");
         }
 
-        public ActionResult Delete(int id)
+        public ActionResult Delete(int id) //grab the info to display on the delete page confirmation
         {
             Species selectedspecies = db.Species.SqlQuery("select * from species where speciesid = @id", new SqlParameter("@id", id)).FirstOrDefault();
 
@@ -106,9 +117,11 @@ namespace PetGrooming.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(int SpeciesID, string DeleteSubmit)
+        public ActionResult Delete(int SpeciesID, string DeleteSubmit) //upon clicking the delete button, run a delete command on the database for that ID
         {
-
+            //This delete assumes that orphaned data in the Pets table would be better suited to be handled by server triggers
+            //if server triggers were not to be used, a delete statement for where the speciesID exists as a foreign key in other
+            //tables would be issued before the delete statement where it is a primary key
             Debug.WriteLine("I am trying to delete a species with an ID of " + SpeciesID);
 
             string query = "DELETE FROM species WHERE speciesid = @SpeciesID";

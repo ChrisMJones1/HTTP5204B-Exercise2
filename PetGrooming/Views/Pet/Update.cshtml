@@ -1,4 +1,4 @@
-﻿@model PetGrooming.Models.Pet
+﻿@model PetGrooming.Models.ViewModels.UpdatePet
 
 
 @{
@@ -11,23 +11,43 @@
     <a href="/Pet/New/">Add Pet</a>
 </div>
 
-<form method="post" action="/Pet/Update/@Model.PetID">
-    <input class="hidden" name="PetID" value="@Model.PetID" />
+<form method="post" action="/Pet/Update/@Model.pet.PetID">
+    <input class="hidden" name="PetID" value="@Model.pet.PetID" />
     <div class="form-group">
         <label for="PetName">Name:</label>
-        <input id="PetName" type="text" class="form-control" name="PetName" value="@Model.PetName" />
+        <input id="PetName" type="text" class="form-control" name="PetName" value="@Model.pet.PetName" />
     </div>
     <div class="form-group">
         <label for="PetWeight">Weight:</label>
-        <input id="PetWeight" class="form-control" type="text" name="PetWeight" value="@Model.Weight" />
+        <input id="PetWeight" class="form-control" type="text" name="PetWeight" value="@Model.pet.Weight" />
+    </div>
+    <div class="form-group">
+        <label for="SpeciesID">Species:</label>
+        <select id="SpeciesID" class="form-control" type="text" name="SpeciesID">
+            @{
+                foreach (var species in Model.species)
+                {
+                    if (@species.SpeciesID == Model.pet.SpeciesID)
+                    {
+                        <option value="@species.SpeciesID" selected>@species.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@species.SpeciesID">@species.Name</option>
+                    }
+
+
+                }
+            }
+        </select>
     </div>
     <div class="form-group">
         <label for="PetColor">Color:</label>
-        <input id="PetColor" type="text" name="PetColor" class="form-control" value="@Model.Color" />
+        <input id="PetColor" type="text" name="PetColor" class="form-control" value="@Model.pet.Color" />
     </div>
     <div class="form-group">
         <label for="PetNotes">Notes:</label>
-        <textarea id="PetNotes" class="form-control" name="PetNotes">@Model.Notes</textarea>
+        <textarea id="PetNotes" class="form-control" name="PetNotes">@Model.pet.Notes</textarea>
     </div>
     <input type="submit" value="Update Pet">
 </form>

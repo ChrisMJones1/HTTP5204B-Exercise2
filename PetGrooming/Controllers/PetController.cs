@@ -10,6 +10,7 @@ using System.Web;
 using System.Web.Mvc;
 using PetGrooming.Data;
 using PetGrooming.Models;
+using PetGrooming.Models.ViewModels;
 using System.Diagnostics;
 
 namespace PetGrooming.Controllers
@@ -116,8 +117,16 @@ namespace PetGrooming.Controllers
         {
             //need information about a particular pet
             Pet selectedpet = db.Pets.SqlQuery("select * from pets where petid = @id", new SqlParameter("@id",id)).FirstOrDefault();
+            
+            string query = "select * from species";
+            List<Species> selectedspecies = db.Species.SqlQuery(query).ToList();
 
-            return View(selectedpet);
+            UpdatePet updatepet = new UpdatePet();
+
+            updatepet.pet = selectedpet;
+            updatepet.species = selectedspecies;
+
+            return View(updatepet);
         }
 
         [HttpPost]
@@ -155,8 +164,8 @@ namespace PetGrooming.Controllers
             Debug.WriteLine("I am trying to delete a pet with an ID of " + PetID);
 
             string query = "DELETE FROM pets WHERE petid = @PetID";
-            SqlParameter[] sqlparams = new SqlParameter[1]; //0,1,2,3,4 pieces of information to add
-            //each piece of information is a key and value pair
+            SqlParameter[] sqlparams = new SqlParameter[1]; 
+
             sqlparams[0] = new SqlParameter("@PetID", PetID);
             if(DeleteSubmit == "Delete Pet?")
             {

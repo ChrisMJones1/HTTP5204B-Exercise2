@@ -7,7 +7,6 @@
 <h2>Add a New Pet</h2>
 
 <form method="POST" action="/Pet/Add">
-    <!-- TODO: format this nicely -->
     <div class="form-group">
         <label for="PetName">Name:</label>
         <input id="PetName" type="text" class="form-control" name="PetName" />
@@ -16,8 +15,6 @@
         <label for="SpeciesID">Species:</label>
         <select id="SpeciesID" class="form-control" type="text" name="SpeciesID">
             @{
-                //A rendering loop for presenting a list of species
-                //The pet should be one of these species
                 foreach (var species in Model)
                 {
                     <option value="@species.SpeciesID">@species.Name</option>
