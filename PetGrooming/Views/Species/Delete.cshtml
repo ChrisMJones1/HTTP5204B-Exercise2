@@ -1,0 +1,20 @@
+﻿@model PetGrooming.Models.Species
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete Species</h2>
+
+<div class="container">
+    <div class="col">Name : @Model.Name</div>
+</div>
+
+<form method="post" class="container" action="/Species/Delete/@Model.SpeciesID">
+
+    <input class="hidden" name="SpeciesID" value="@Model.SpeciesID" />
+    <div class="form-group">
+        <input type="submit" class="form-control" name="DeleteSubmit" value="Delete Species?">
+    </div>
+    
+</form>
